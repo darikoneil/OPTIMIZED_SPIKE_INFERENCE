@@ -1,7 +1,7 @@
 # OPTIMIZED_SPIKE_INFERENCE
 SCRIPTS FOR OPTIMIZED SPIKE INFERENCE USING JEWELL METHOD OF L0-OPTIMIZATION
 
-## Constrained or different autoregressive orders can be inserted simply by adding correct tag to in single_loop & final_fit functions
+## Constrained or different autoregressive orders can be inserted simply by adding correct tag in single_loop & final_fit functions
 See following paper for further details:
 Fast nonconvex deconvolution of calcium imaging data
 Sean W Jewell, Toby Dylan Hocking, Paul Fearnhead, Daniela M Witten
