@@ -1,7 +1,7 @@
 # OPTIMIZED_SPIKE_INFERENCE
 SCRIPTS FOR OPTIMIZED SPIKE INFERENCE USING JEWELL METHOD OF L0-OPTIMIZATION
 
-## OPTIMAL LAMBDA IS DEFINED AS THAT WHICH MINIMIZES THE NUMBER OF ("FALSE") SPIKES THAT DO NOT EXCEED TWICE THE STDEV OF THE INTRINSIC NOISE
+## Optimal lambda is defined as that which minimized the number of ("false") spikes that do not exceed twice the stdev of the intrinsic noise
 
 ## Constrained or different autoregressive orders can be inserted simply by adding correct tag in single_loop & final_fit functions
 See following paper for further details:
