@@ -1,6 +1,8 @@
 # OPTIMIZED_SPIKE_INFERENCE
 SCRIPTS FOR OPTIMIZED SPIKE INFERENCE USING JEWELL METHOD OF L0-OPTIMIZATION
 
+## OPTIMAL LAMBDA IS DEFINED AS THAT WHICH MINIMIZES THE NUMBER OF ("FALSE") SPIKES THAT DO NOT EXCEED TWICE THE STDEV OF THE INTRINSIC NOISE
+
 ## Constrained or different autoregressive orders can be inserted simply by adding correct tag in single_loop & final_fit functions
 See following paper for further details:
 Fast nonconvex deconvolution of calcium imaging data
