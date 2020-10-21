@@ -1,23 +1,23 @@
 # OPTIMIZED_SPIKE_INFERENCE
 SCRIPTS FOR OPTIMIZED SPIKE INFERENCE USING JEWELL METHOD OF L0-OPTIMIZATION
 
-# Constrained or different autoregressive orders can be inserted simply by adding correct tag to in single_loop & final_fit functions
+## Constrained or different autoregressive orders can be inserted simply by adding correct tag to in single_loop & final_fit functions
 See following paper for further details:
 Fast nonconvex deconvolution of calcium imaging data
 Sean W Jewell, Toby Dylan Hocking, Paul Fearnhead, Daniela M Witten
 Biostatistics, Volume 21, Issue 4, October 2020, Pages 709–726,
 
-# Gamma decay can be solved for directly by measuring the decay of single AP in a particular genetic line.
+## Gamma decay can be solved for directly by measuring the decay of single AP in a particular genetic line.
 Solving the approximate gamma = 1-(Delta/Phi) has shown sufficiency
 where Delta = 1/framerate &
 Phi is an approximate indicator-specific value 
 (i.e., 0.7, 1.2 or 2 for fast, medium, or slow GCaMP6 respectively)
 
-# The size of the median filter can be adjusted in the set order function
+## The size of the median filter can be adjusted in the set order function
 It currently is set to approximately 3 seconds to adjust for long-scale shifts in fluorescence
 
 
-# This script requires the following R packages from GitHub and/or CRAN:
+## This script requires the following R packages from GitHub and/or CRAN:
 FastLZeroSpikeInference (https://github.com/jewellsean/FastLZeroSpikeInference)
 Fractal
 ifultools
