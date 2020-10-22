@@ -17,13 +17,14 @@ framerate <- 7.725
 indicator_type <- 0.7
 
 #SET LAMBDA RANGE
-LL = seq(from = 0, to = 0.01, by = 0.0005)
+LL = seq(from = 0, to = 0.1, by = 0.0005)
 LL <- LL[-1]
 ##############################################################################################################
 
 #IMPORT LIBRARIES
 library(FastLZeroSpikeInference)
 library(fractal)
+library(STAR)
 
 #FIND NUMBER OF NEURONS
 num_neur = nrow(DATA_SET)
@@ -74,6 +75,7 @@ final_fit <- function(DATA_SET, gamma_decay, L_lambda, EST_CAL, neuron, order){
   c_dfof <- correction(DATA_SET, neuron, order)
   in_noise_thr <- intrinsic_noise_threshold(c_dfof)
   fit <- estimate_spikes(dat = c_dfof, gam = gamma_decay, lambda = L_lambda, estimate_calcium = EST_CAL)
+  fit[["neuron"]]=c(fit[["neuron"]],neuron)
   return(fit)
 }
 
@@ -126,8 +128,11 @@ for (n in seq_along(neuron_list)){
   SPIKE_TIMES[[n]]<-STL
 }
 
+#NOW WE CONVERT TO TRAINS
+SPK_TRAINS <- as.repeatedTrain(SPIKE_TIMES)
+
 #HERE WE ARE SOME PLOTTING FUNCTIONS
-plot.estimated_spikes <- function(x, xlims = NULL, ...) {
+plot.estimated_spikes <- function(x, xlims = NULL, ...){
   if (sum(is.na(x$estimated_calcium))) {
     stop("Calcium concentration must be estimated before plotting. (Run estimate_calcium(fit).)")
   }
@@ -135,7 +140,7 @@ plot.estimated_spikes <- function(x, xlims = NULL, ...) {
   rng <- range(c(x$dat, x$estimated_calcium))
   ylims <- rng 
   if (is.null(xlims)){
-    plot(ind, x$dat, cex = 0.5, pch = 20, col = "darkgrey", ylab = "Signal", ylim = ylims, xlab = "Frame", main = "Neuron 1 Spike Inference")
+    plot(ind, x$dat, cex = 0.5, pch = 20, col = "darkgrey", ylab = "Signal", ylim = ylims, xlab = "Frame", main = paste("Neuron ", neuron, " Spike Inference", sep=""))
   } else {
     plot(ind, x$dat, cex = 0.5, pch = 20, col = "darkgrey", ylab = "", ylim = ylims, xlim = xlims, xlab = "Time")
   }
@@ -148,6 +153,7 @@ plot.estimated_spikes <- function(x, xlims = NULL, ...) {
              y1 = hh + ylims[1], col = "blue", lwd = 1)
   }
 }
+
 HIST_LAM <- function(OPT_LAMBDAS, OPT_LAMBDAS_SPIKES){
   #FIRST HISTOGRAM OF OPTOMIZED LAMBDAS
   hist(OPT_LAMBDAS, xlab = "OPTIMIZED LAMBDA", ylab = "FREQUENCY", main = "HISTOGRAM OF OPTIMAL LAMBDAS")
@@ -163,14 +169,17 @@ PLOT_IND_NEUR <- function(DATA_SET, gamma_decay, neuron, order, OPT_LAMBDAS, SPI
   #NOW WE PRINT THE RESULTS
   print(fit)
   #NOW WE PLOT THE RESULTS
-  plot(fit, ylab="Corrected DFoF", xlab="Frame", main="Neuron 1 Spike Inference", sub="Blue = Estimated 'True' Ca++ Signal")
+  plot(fit, ylab="Corrected DFoF", xlab="Frame",  main=paste("Neuron ", neuron, " Spike Inference", sep = ""), sub="Blue = Estimated 'True' Ca++ Signal")
   #NOW WE RUN SECOND PLOT - THE OPTIMIZATION PLOT
-  plot(LL,FALSE_SPIKES[neuron,], type="o", col="red", pch="o",lty=1, ylab="Spikes Detected", xlab="Lambda", main="Neuron 1 Spike Inference Optimization")
+  plot(LL,FALSE_SPIKES[neuron,], type="o", col="red", pch="o",lty=1, ylab="Spikes Detected", xlab="Lambda", main= paste("Neuron ", neuron, " Spike Inference Optimization", sep=""))
   points(LL,SPIKES[neuron,], col="blue", pch="*")
   lines(LL,SPIKES[neuron,], col="blue", lty=2)
   legend("topright", legend=c("FALSE SPIKES","SPIKES"),col=c("red","blue"),pch=c("o","*"),lty=1:2, cex=0.8, text.font=4, bg='lightblue')
 }
-
+MAKE_RASTER_PLOT <- function(SPK_TRAINS){
+ plot(SPK_TRAINS, ylab = "Neuron", xlab = "Frames")
+ raster(SPK_TRAINS, ylab = "Neuron", xlab = "Frames")
+}
 
 
     
