@@ -32,3 +32,8 @@ devtools
 scatterplot3D
 MASS
 methods
+STAR
+sound
+mgcv
+survival
+R2HTML
