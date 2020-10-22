@@ -1,7 +1,7 @@
 #THIS IS A SCRIPT FOR OPTIMIZED SPIKE INFERENCE FOR A COMPLETE DATASET
 
+#############################################################################################################
 
-############################################################################################################
 #USER PARAMETERS & SETTINGS
 
 #IMPORT DATASET INTO R & GENERATE MATRIX
@@ -19,6 +19,7 @@ indicator_type <- 0.7
 #SET LAMBDA RANGE
 LL = seq(from = 0, to = 0.1, by = 0.0005)
 LL <- LL[-1]
+
 ##############################################################################################################
 
 #IMPORT LIBRARIES
@@ -33,6 +34,9 @@ num_neur = nrow(DATA_SET)
 #ROWS = NEURONS, COL = LAMBDA
 SPIKES <- matrix(0,nrow=num_neur, ncol=length(LL))
 FALSE_SPIKES <- matrix(0, nrow=num_neur, ncol=length(LL))
+
+
+##############################################################################################################
 
 #MAKE FUNCTIONS
 approx_gamma_decay <- function(framerate,indicator_type){
@@ -92,6 +96,8 @@ find_spike_times <- function(DATA_SET, gamma_decay, L_lambda, EST_CAL, neuron, o
   return(STL)
 }
 
+
+###############################################################################################################
 #FIRST FIND GAMMA DECAY
 gamma_decay <- approx_gamma_decay(framerate,indicator_type)
 
@@ -131,6 +137,10 @@ for (n in seq_along(neuron_list)){
 #NOW WE CONVERT TO TRAINS
 SPK_TRAINS <- as.repeatedTrain(SPIKE_TIMES)
 
+#ANALYSIS FINISHED
+
+
+###############################################################################################################
 #HERE WE ARE SOME PLOTTING FUNCTIONS
 plot.estimated_spikes <- function(x, xlims = NULL, ...){
   if (sum(is.na(x$estimated_calcium))) {
@@ -140,7 +150,7 @@ plot.estimated_spikes <- function(x, xlims = NULL, ...){
   rng <- range(c(x$dat, x$estimated_calcium))
   ylims <- rng 
   if (is.null(xlims)){
-    plot(ind, x$dat, cex = 0.5, pch = 20, col = "darkgrey", ylab = "Signal", ylim = ylims, xlab = "Frame", main = paste("Neuron ", neuron, " Spike Inference", sep=""))
+    plot(ind, x$dat, cex = 0.5, pch = 20, col = "darkgrey", ylab = "Signal", ylim = ylims, xlab = "Frame", main = paste("Neuron ", x$neuron, " Spike Inference", sep=""))
   } else {
     plot(ind, x$dat, cex = 0.5, pch = 20, col = "darkgrey", ylab = "", ylim = ylims, xlim = xlims, xlab = "Time")
   }
@@ -153,7 +163,6 @@ plot.estimated_spikes <- function(x, xlims = NULL, ...){
              y1 = hh + ylims[1], col = "blue", lwd = 1)
   }
 }
-
 HIST_LAM <- function(OPT_LAMBDAS, OPT_LAMBDAS_SPIKES){
   #FIRST HISTOGRAM OF OPTOMIZED LAMBDAS
   hist(OPT_LAMBDAS, xlab = "OPTIMIZED LAMBDA", ylab = "FREQUENCY", main = "HISTOGRAM OF OPTIMAL LAMBDAS")
@@ -180,6 +189,11 @@ MAKE_RASTER_PLOT <- function(SPK_TRAINS){
  plot(SPK_TRAINS, ylab = "Neuron", xlab = "Frames")
  raster(SPK_TRAINS, ylab = "Neuron", xlab = "Frames")
 }
+
+#UNCOMMENT IF DESIRED TO PRODUCE ALL PLOTS
+#for(i in seq_along(neuron_list)){
+ # PLOT_IND_NEUR(DATA_SET, gamma_decay, neuron=neuron_list[i], order, OPT_LAMBDAS, SPIKES, FALSE_SPIKES)
+#}
 
 
     
