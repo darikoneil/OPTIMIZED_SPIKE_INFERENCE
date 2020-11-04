@@ -13,8 +13,8 @@ rm(DATA_CSV)
 
 #SET FRAMERATE & INDICATOR TYPES
 #0.7 = f, 1.2 = m, 2 = s
-framerate <- 7.725
-indicator_type <- 0.7
+framerate <- 15.45
+indicator_type <- 2
 
 #SET LAMBDA RANGE
 LL = seq(from = 0, to = 0.1, by = 0.0005)
@@ -192,7 +192,7 @@ MAKE_RASTER_PLOT <- function(SPK_TRAINS){
 
 #UNCOMMENT IF DESIRED TO PRODUCE ALL PLOTS
 #for(i in seq_along(neuron_list)){
- # PLOT_IND_NEUR(DATA_SET, gamma_decay, neuron=neuron_list[i], order, OPT_LAMBDAS, SPIKES, FALSE_SPIKES)
+  #PLOT_IND_NEUR(DATA_SET, gamma_decay, neuron=neuron_list[i], order, OPT_LAMBDAS, SPIKES, FALSE_SPIKES)
 #}
 
 
