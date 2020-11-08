@@ -1,5 +1,5 @@
 # OPTIMIZED_SPIKE_INFERENCE
-SCRIPTS FOR OPTIMIZED SPIKE INFERENCE USING JEWELL METHOD OF L0-OPTIMIZATION
+SCRIPTS FOR OPTIMIZED SPIKE INFERENCE IMPLEMENTING JEWELL METHOD OF L0-OPTIMIZATION
 
 ## Optimal lambda is defined as that which minimizes the number of ("false") spikes that do not exceed twice the stdev of the intrinsic noise of an adjusted DFoF
 Given that eventually lambda will (likely) progress to such a level that no spike events are detected, this script selects the first lambda to minimize the number of false spikes.
