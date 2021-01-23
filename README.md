@@ -19,6 +19,8 @@ Phi is an approximate indicator-specific value
 
 ## The size of the median filter can be adjusted in the set order function
 It currently is set to approximately 3 seconds to adjust for long-scale shifts in fluorescence
+Good chance you do some sort of filtering on your trace anyway, so make sure to comment this out if so
+Much prefer a gaussian filter of width of approx. one-half the rise+decay time of your indicator
 
 
 ## This script requires the following R packages from GitHub and/or CRAN:
