@@ -2,10 +2,13 @@
 
 #############################################################################################################
 
+
+#REMOVED MEDIAN FILTER
+
 #USER PARAMETERS & SETTINGS
 
 #IMPORT DATASET INTO R & GENERATE MATRIX
-DATA_CSV = read.csv("C:\\Users\\YUSTE\\Documents\\Github\\caiman_sorter\\Good_Components.csv", header=FALSE)
+DATA_CSV = read.csv("C:\\Users\\YUSTE\\Documents\\Github\\FastLZeroSpikeInference\\EYE_TRACES_EIGHT_50.csv", header=FALSE)
 DATA_SET = as.matrix(DATA_CSV)
 
 #CLEANUP
@@ -13,11 +16,11 @@ rm(DATA_CSV)
 
 #SET FRAMERATE & INDICATOR TYPES
 #0.7 = f, 1.2 = m, 2 = s
-framerate <- 15.45
+framerate <- 30.95
 indicator_type <- 2
 
 #SET LAMBDA RANGE
-LL = seq(from = 0, to = 0.1, by = 0.0005)
+LL = seq(from = 0, to = 1, by = 0.0025)
 LL <- LL[-1]
 
 ##############################################################################################################
@@ -26,6 +29,7 @@ LL <- LL[-1]
 library(FastLZeroSpikeInference)
 library(fractal)
 library(STAR)
+library(R.matlab)
 
 #FIND NUMBER OF NEURONS
 num_neur = nrow(DATA_SET)
@@ -47,7 +51,8 @@ approx_gamma_decay <- function(framerate,indicator_type){
 }
 
 correction <- function(DATA_SET, neuron, order){
-  c_dfof <- medianFilter(DATA_SET[neuron,],order)
+  #c_dfof <- medianFilter(DATA_SET[neuron,],order)
+  c_dfof <- DATA_SET[neuron,]
   return(c_dfof)
 }
 
@@ -67,7 +72,7 @@ single_loop <- function(DATA_SET, gamma_decay, L_lambda, EST_CAL, neuron, order)
   S = numeric(length=2)
   c_dfof <- correction(DATA_SET, neuron, order)
   in_noise_thr <- intrinsic_noise_threshold(c_dfof)
-  fit <- estimate_spikes(dat = c_dfof, gam = gamma_decay, lambda = L_lambda, estimate_calcium = EST_CAL)
+  fit <- estimate_spikes(dat = c_dfof, gam = gamma_decay, lambda = L_lambda, constraint=T, estimate_calcium = EST_CAL)
   spikes = length(fit[[1]])
   false_spikes = false_spike_finder(in_noise_thr, c_dfof, fit)
   S[1] = spikes
@@ -78,7 +83,7 @@ single_loop <- function(DATA_SET, gamma_decay, L_lambda, EST_CAL, neuron, order)
 final_fit <- function(DATA_SET, gamma_decay, L_lambda, EST_CAL, neuron, order){
   c_dfof <- correction(DATA_SET, neuron, order)
   in_noise_thr <- intrinsic_noise_threshold(c_dfof)
-  fit <- estimate_spikes(dat = c_dfof, gam = gamma_decay, lambda = L_lambda, estimate_calcium = EST_CAL)
+  fit <- estimate_spikes(dat = c_dfof, gam = gamma_decay, lambda = L_lambda, constraint=T, estimate_calcium = EST_CAL)
   fit[["neuron"]]=c(fit[["neuron"]],neuron)
   return(fit)
 }
@@ -91,7 +96,7 @@ set_order <- function(framerate){
 find_spike_times <- function(DATA_SET, gamma_decay, L_lambda, EST_CAL, neuron, order){
   c_dfof <- correction(DATA_SET, neuron, order)
   in_noise_thr <- intrinsic_noise_threshold(c_dfof)
-  fit <- estimate_spikes(dat = c_dfof, gam = gamma_decay, lambda = L_lambda, estimate_calcium = EST_CAL)
+  fit <- estimate_spikes(dat = c_dfof, gam = gamma_decay, lambda = L_lambda, constraint=T, estimate_calcium = EST_CAL)
   STL = fit[[1]]
   return(STL)
 }
@@ -191,16 +196,29 @@ MAKE_RASTER_PLOT <- function(SPK_TRAINS){
 }
 
 #UNCOMMENT IF DESIRED TO PRODUCE ALL PLOTS
-#for(i in seq_along(neuron_list)){
-  #PLOT_IND_NEUR(DATA_SET, gamma_decay, neuron=neuron_list[i], order, OPT_LAMBDAS, SPIKES, FALSE_SPIKES)
+#for(i in seq(from = 1, to = length(neuron_list), by = 1)){
+#  PLOT_IND_NEUR(DATA_SET, gamma_decay, neuron=neuron_list[i], order, OPT_LAMBDAS, SPIKES, FALSE_SPIKES)
 #}
 
 
+Smat <- matrix(nrow=num_neur,ncol=max(SPIKES))
+ #             
+LENSPIKE = seq(from=1,to=num_neur,by=1)  
+
+for(i in seq_along(SPIKE_TIMES)){
+  if(length(SPIKE_TIMES[[i]])==0){
+    SPIKE_TIMES[[i]]=1  }
+}
     
+for(i in seq_along(LENSPIKE)){
+  Smat[i,1:length(SPIKE_TIMES[[i]])]=SPIKE_TIMES[[i]]
+}
+  
+writeMat('EYE_EIGHT_50.mat',spM=Smat)
+
+#HIST_LAM(OPT_LAMBDAS, OPT_LAMBDAS_SPIKES)
+ MAKE_RASTER_PLOT(SPK_TRAINS)   
     
-    
-    
-    
-    
+
     
     
