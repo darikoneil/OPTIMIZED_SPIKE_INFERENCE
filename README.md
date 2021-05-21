@@ -1,6 +1,8 @@
 # OPTIMIZED_SPIKE_INFERENCE
 SCRIPTS FOR OPTIMIZED SPIKE INFERENCE IMPLEMENTING JEWELL METHOD OF L0-OPTIMIZATION
 
+## When used as follows it's really more of an event detection than spike inference fwiw
+
 ## Optimal lambda is defined as that which minimizes the number of ("false") spikes that do not exceed twice the stdev of the intrinsic noise of an adjusted DFoF
 Given that eventually lambda will (likely) progress to such a level that no spike events are detected, this script selects the first lambda to minimize the number of false spikes.
 That is, the optimal lambda is that which detects the most spikes while minimizing the number of false spike detections.
@@ -18,9 +20,11 @@ Phi is an approximate indicator-specific value
 (i.e., 0.7, 1.2 or 2 for fast, medium, or slow GCaMP6 respectively)
 
 ## The size of the median filter can be adjusted in the set order function
-It currently is set to approximately 3 seconds to adjust for long-scale shifts in fluorescence
-Good chance you do some sort of filtering on your trace anyway, so make sure to comment this out if so
+Papers have used approximately 3 seconds to adjust for long-scale shifts in fluorescence
 Much prefer a gaussian filter of width of approx. one-half the rise+decay time of your indicator
+
+## "accuracy" extremely dependent on choice of hyperparameters and threshold selection. Manual threshold selection is far more accurate than just using 2 times std, but
+then you end up spendings lots of time doing it.
 
 
 ## This script requires the following R packages from GitHub and/or CRAN:
