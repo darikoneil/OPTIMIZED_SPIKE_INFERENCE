@@ -24,7 +24,7 @@ Papers have used approximately 3 seconds to adjust for long-scale shifts in fluo
 Much prefer a gaussian filter of width of approx. one-half the rise+decay time of your indicator
 
 ## "accuracy" extremely dependent on choice of hyperparameters and threshold selection. Manual threshold selection is far more accurate than just using 2 times std, but
-then you end up spendings lots of time doing it.
+then you end up spendings lots of time doing it. Letting the program choose the params ends up as more of an event detection fwiw
 
 
 ## This script requires the following R packages from GitHub and/or CRAN:
